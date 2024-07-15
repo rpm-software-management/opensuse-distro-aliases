@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "opensuse-distro-aliases"
+version = "0.1.0"
+description = "Aliases for active openSUSE releases"
+authors = ["Dan Čermák <dcermak@suse.com>"]
+license = "MIT"
+readme = "README.rst"
+packages = [{include = "opensuse_distro_aliases", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = ">=2.32"
+
+[tool.poetry.group.dev.dependencies]
+mypy = ">=1.10"
+ruff = ">=0.5"
+twine = ">=5.1"
+types-requests = ">=2.32"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff.lint]
+select = [
+    # Pyflakes
+    "F",
+    # Pycodestyle
+    "E",
+    "W",
+    # isort
+    "I"
+]
+
+[tool.ruff]
+src = ["src"]
+target-version = "py39"
+
+[tool.ruff.lint.isort]
+force-single-line = true
+case-sensitive = true

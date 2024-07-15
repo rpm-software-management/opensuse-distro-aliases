@@ -1,0 +1,111 @@
+---
+name: CI
+
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+
+jobs:
+  format:
+    name: Ensure code is properly formatted
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: poetry-${{ hashFiles('poetry.lock') }}
+
+      - run: sudo pipx install poetry
+        env:
+          PIPX_BIN_DIR: /usr/bin
+
+      - run: |
+          poetry install
+          poetry run ruff format --check --diff .
+
+  build:
+    name: Build the package
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: poetry-${{ hashFiles('poetry.lock') }}
+
+      - run: sudo pipx install poetry
+        env:
+          PIPX_BIN_DIR: /usr/bin
+
+      - name: Run the build
+        run: |
+          poetry install
+          poetry build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheel
+          path: dist/opensuse_distro_aliases*whl
+          if-no-files-found: error
+
+  install:
+    name: Install the package
+    runs-on: "ubuntu-latest"
+    needs: build
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: wheel
+          path: dist
+
+      - name: install the wheel
+        run: pip install dist/opensuse_distro_aliases*whl
+
+      - name: run a smoke test that the package has been installed
+        run: |
+          python3 -c "from opensuse_distro_aliases import get_distro_aliases; print(get_distro_aliases())"
+
+  lint:
+    name: Lint the source code
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: poetry-${{ hashFiles('poetry.lock') }}
+
+      - run: sudo pipx install poetry
+        env:
+          PIPX_BIN_DIR: /usr/bin
+
+      - run: poetry install
+
+      # grab the previously built wheel for checking with twine
+      - uses: actions/download-artifact@v4
+        with:
+          name: wheel
+          path: dist
+
+      - run: poetry run mypy --strict src/
+      - run: poetry run twine check dist/*whl
+      - run: poetry run ruff check
+
