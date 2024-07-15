@@ -29,5 +29,5 @@ Get the corresponding main development project in the `Open Build Service
 
 .. code-block:: python-console
 
-   >>> [f"{d.name}: {d.obs_project_name}" for d in aliases["opensuse-all"] if d.obs_project_name]
-   ['openSUSE Leap: openSUSE:Leap:15.6', 'openSUSE Leap: openSUSE:Leap:15.5', 'openSUSE Tumbleweed: openSUSE:Factory']
+   >>> [f"{d.name}: {d.obs_project_name}" for d in aliases["opensuse-all"]]
+   ['openSUSE Leap: openSUSE:Leap:15.6', 'openSUSE Leap: openSUSE:Leap:15.5', 'openSUSE Leap Micro: openSUSE:Leap:Micro:6.0', 'openSUSE Leap Micro: openSUSE:Leap:Micro:5.5', 'openSUSE Tumbleweed: openSUSE:Factory']
