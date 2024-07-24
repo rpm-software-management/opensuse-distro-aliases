@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import Dict
 from typing import List
 from typing import Literal
+from typing import Optional
 from typing import TypedDict
 from typing import Union
 
@@ -25,7 +26,7 @@ class Distro:
     namever: str
 
     #: main project on build.opensuse.org from which this distribution is built
-    obs_project_name: str | None
+    obs_project_name: Optional[str]
 
 
 class _Release(TypedDict):
