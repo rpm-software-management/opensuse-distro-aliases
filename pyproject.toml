@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "opensuse-distro-aliases"
-version = "0.1.1"
+version = "0.1.2"
 description = "Aliases for active openSUSE releases"
 authors = ["Dan Čermák <dcermak@suse.com>"]
 license = "MIT"
@@ -9,13 +9,14 @@ packages = [{include = "opensuse_distro_aliases", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-requests = ">=2.32"
+# el9 ships requests 2.25, don't bump this
+requests = ">=2.25"
 
 [tool.poetry.group.dev.dependencies]
 mypy = ">=1.10"
 ruff = ">=0.5"
 twine = ">=5.1"
-types-requests = ">=2.32"
+types-requests = ">=2.25"
 
 [build-system]
 requires = ["poetry-core"]
