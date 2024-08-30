@@ -12,7 +12,7 @@ import requests
 __all__ = ["Distro", "get_distro_aliases"]
 
 
-@dataclass
+@dataclass(frozen=True)
 class Distro:
     """An openSUSE distribution"""
 
