@@ -1,0 +1,35 @@
+---
+name: Check that the cached aliases are up to date
+
+on:
+  schedule:
+    - cron: "44 4 */2 * *"
+  pull_request:
+
+jobs:
+  cache_check:
+    name: Check the cached constant
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: poetry-${{ hashFiles('poetry.lock') }}
+
+      - run: sudo pipx install poetry
+        env:
+          PIPX_BIN_DIR: /usr/bin
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Run the test checking the cache
+        run: poetry run pytest -vv -k cache_up_to_date
