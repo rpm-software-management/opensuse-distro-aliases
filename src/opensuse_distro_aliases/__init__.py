@@ -28,6 +28,9 @@ class Distro:
     #: main project on build.opensuse.org from which this distribution is built
     obs_project_name: Optional[str]
 
+    #: flag whether this distribution is still under active maintenance
+    active: bool = True
+
 
 class _Release(TypedDict):
     name: str
@@ -71,6 +74,7 @@ def get_distro_aliases(include_eol: bool = False) -> Dict[str, List[Distro]]:
                     version=d["version"],
                     namever="opensuse-tumbleweed",
                     obs_project_name="openSUSE:Factory",
+                    active=True,
                 )
             )
 
@@ -78,7 +82,7 @@ def get_distro_aliases(include_eol: bool = False) -> Dict[str, List[Distro]]:
             matching_products = productlist.findall(f"product[@name='{distro_name}']")
 
             for distri in distro_list:
-                if include_eol or distri.get("state", "") != "EOL":
+                if (active := distri.get("state", "") != "EOL") or include_eol:
                     version = distri["version"]
                     obs_project = [
                         op
@@ -95,6 +99,7 @@ def get_distro_aliases(include_eol: bool = False) -> Dict[str, List[Distro]]:
                             # stay compatible with mock chroot names
                             namever=f"{n.lower().replace(' ', '-')}-{version}",
                             obs_project_name=obs_project[0] if obs_project else None,
+                            active=active,
                         )
                     )
 
