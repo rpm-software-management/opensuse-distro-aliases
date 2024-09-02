@@ -9,10 +9,10 @@ from typing import Union
 
 import requests
 
-__all__ = ["Distro", "get_distro_aliases"]
+__all__ = ["Distro", "get_distro_aliases", "CACHED_ACTIVE_DISTRIBUTION_ALIASES"]
 
 
-@dataclass
+@dataclass(frozen=True)
 class Distro:
     """An openSUSE distribution"""
 
@@ -27,6 +27,9 @@ class Distro:
 
     #: main project on build.opensuse.org from which this distribution is built
     obs_project_name: Optional[str]
+
+    #: flag whether this distribution is still under active maintenance
+    active: bool = True
 
 
 class _Release(TypedDict):
@@ -71,6 +74,7 @@ def get_distro_aliases(include_eol: bool = False) -> Dict[str, List[Distro]]:
                     version=d["version"],
                     namever="opensuse-tumbleweed",
                     obs_project_name="openSUSE:Factory",
+                    active=True,
                 )
             )
 
@@ -78,7 +82,7 @@ def get_distro_aliases(include_eol: bool = False) -> Dict[str, List[Distro]]:
             matching_products = productlist.findall(f"product[@name='{distro_name}']")
 
             for distri in distro_list:
-                if include_eol or distri.get("state", "") != "EOL":
+                if (active := distri.get("state", "") != "EOL") or include_eol:
                     version = distri["version"]
                     obs_project = [
                         op
@@ -95,6 +99,7 @@ def get_distro_aliases(include_eol: bool = False) -> Dict[str, List[Distro]]:
                             # stay compatible with mock chroot names
                             namever=f"{n.lower().replace(' ', '-')}-{version}",
                             obs_project_name=obs_project[0] if obs_project else None,
+                            active=active,
                         )
                     )
 
@@ -107,3 +112,57 @@ def get_distro_aliases(include_eol: bool = False) -> Dict[str, List[Distro]]:
     res["opensuse-all"] = opensuse_all
 
     return res
+
+
+#: Cached openSUSE distribution aliases. Only includes distributions that are
+#: active/maintained
+#:
+#: This constant is a pre-fetched result of :py:func:`get_distro_aliases` with
+#: the only difference that the :py:attr:`Distro.version` of openSUSE Tumbleweed
+#: is clipped.
+#:
+#: This constant is periodically updated and should be quite up to date most of
+#: the time as most openSUSE releases don't change very often.
+CACHED_ACTIVE_DISTRIBUTION_ALIASES: Dict[str, List[Distro]] = {
+    "opensuse-leap-all": (
+        _leap_all := [
+            Distro(
+                name="openSUSE Leap",
+                version="15.6",
+                namever="opensuse-leap-15.6",
+                obs_project_name="openSUSE:Leap:15.6",
+            ),
+            Distro(
+                name="openSUSE Leap",
+                version="15.5",
+                namever="opensuse-leap-15.5",
+                obs_project_name="openSUSE:Leap:15.5",
+            ),
+        ]
+    ),
+    "opensuse-leap-micro-all": (
+        _leap_micro_all := [
+            Distro(
+                name="openSUSE Leap Micro",
+                version="6.0",
+                namever="opensuse-leap-micro-6.0",
+                obs_project_name="openSUSE:Leap:Micro:6.0",
+            ),
+            Distro(
+                name="openSUSE Leap Micro",
+                version="5.5",
+                namever="opensuse-leap-micro-5.5",
+                obs_project_name="openSUSE:Leap:Micro:5.5",
+            ),
+        ]
+    ),
+    "opensuse-tumbleweed-all": [
+        _tw := Distro(
+            name="openSUSE Tumbleweed",
+            version="",
+            namever="opensuse-tumbleweed",
+            obs_project_name="openSUSE:Factory",
+        )
+    ],
+    "opensuse-all": [*_leap_all, *_leap_micro_all, _tw],
+}

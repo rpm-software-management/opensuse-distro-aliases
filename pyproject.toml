@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "opensuse-distro-aliases"
-version = "0.1.3"
+version = "0.2.0"
 description = "Aliases for active openSUSE releases"
 authors = ["Dan Čermák <dcermak@suse.com>"]
 license = "MIT"
@@ -17,6 +17,7 @@ mypy = ">=1.10"
 ruff = ">=0.5"
 twine = ">=5.1"
 types-requests = ">=2.25"
+pytest = ">=8.3.2"
 
 [build-system]
 requires = ["poetry-core"]
