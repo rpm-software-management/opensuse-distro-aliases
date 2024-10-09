@@ -128,6 +128,13 @@ CACHED_ACTIVE_DISTRIBUTION_ALIASES: Dict[str, List[Distro]] = {
         _leap_all := [
             Distro(
                 name="openSUSE Leap",
+                version="16.0",
+                namever="opensuse-leap-16.0",
+                obs_project_name=None,
+                active=True,
+            ),
+            Distro(
+                name="openSUSE Leap",
                 version="15.6",
                 namever="opensuse-leap-15.6",
                 obs_project_name="openSUSE:Leap:15.6",
