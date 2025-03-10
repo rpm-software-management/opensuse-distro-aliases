@@ -66,7 +66,7 @@ def get_distro_aliases(include_eol: bool = False) -> Dict[str, List[Distro]]:
         if distro_name == "LeapMicro":
             distro_name = "Leap-Micro"
 
-        if distro_name == "Tumbleweed":
+        if distro_name == "Tumbleweed" and distro_list:
             d = distro_list[0]
             aliases.append(
                 Distro(
