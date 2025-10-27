@@ -82,7 +82,7 @@ jobs:
           poetry install
           poetry build
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: wheel
           path: dist/opensuse_distro_aliases*whl
