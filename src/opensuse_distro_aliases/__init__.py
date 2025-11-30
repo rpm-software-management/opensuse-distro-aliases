@@ -147,7 +147,7 @@ CACHED_ACTIVE_DISTRIBUTION_ALIASES: Dict[str, List[Distro]] = {
                 name="openSUSE Leap Micro",
                 version="6.2",
                 namever="opensuse-leap-micro-6.2",
-                obs_project_name=None,
+                obs_project_name="openSUSE:Leap:Micro:6.2",
             ),
             Distro(
                 name="openSUSE Leap Micro",
