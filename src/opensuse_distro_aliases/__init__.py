@@ -155,18 +155,6 @@ CACHED_ACTIVE_DISTRIBUTION_ALIASES: Dict[str, List[Distro]] = {
                 namever="opensuse-leap-micro-6.1",
                 obs_project_name="openSUSE:Leap:Micro:6.1",
             ),
-            Distro(
-                name="openSUSE Leap Micro",
-                version="6.0",
-                namever="opensuse-leap-micro-6.0",
-                obs_project_name="openSUSE:Leap:Micro:6.0",
-            ),
-            Distro(
-                name="openSUSE Leap Micro",
-                version="5.5",
-                namever="opensuse-leap-micro-5.5",
-                obs_project_name="openSUSE:Leap:Micro:5.5",
-            ),
         ]
     ),
     "opensuse-tumbleweed-all": [
