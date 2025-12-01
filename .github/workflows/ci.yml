@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
           python-version: '3.x'
@@ -39,7 +39,7 @@ jobs:
         python_version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python_version }}
@@ -64,7 +64,7 @@ jobs:
     needs: tests
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
           python-version: "3.x"
@@ -82,7 +82,7 @@ jobs:
           poetry install
           poetry build
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: wheel
           path: dist/opensuse_distro_aliases*whl
@@ -102,7 +102,7 @@ jobs:
         with:
           python-version: ${{ matrix.python_version }}
 
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v6
         with:
           name: wheel
           path: dist
@@ -120,7 +120,7 @@ jobs:
     needs: build
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
           python-version: '3.x'
@@ -137,7 +137,7 @@ jobs:
       - run: poetry install
 
       # grab the previously built wheel for checking with twine
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v6
         with:
           name: wheel
           path: dist
