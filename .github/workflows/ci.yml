@@ -102,7 +102,7 @@ jobs:
         with:
           python-version: ${{ matrix.python_version }}
 
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v7
         with:
           name: wheel
           path: dist
@@ -137,7 +137,7 @@ jobs:
       - run: poetry install
 
       # grab the previously built wheel for checking with twine
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v7
         with:
           name: wheel
           path: dist
