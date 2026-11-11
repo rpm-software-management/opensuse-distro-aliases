@@ -32,11 +32,14 @@ jobs:
 
   tests:
     name: Run the integration/smoke tests
-    runs-on: "ubuntu-latest"
+    runs-on: "${{ matrix.os_version || 'ubuntu-latest' }}"
     strategy:
       fail-fast: false
       matrix:
-        python_version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        python_version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14", "3.15"]
+        include:
+          - python_version: "3.9"
+            os_version: "ubuntu-24.04"
 
     steps:
       - uses: actions/checkout@v7
@@ -90,12 +93,15 @@ jobs:
 
   install:
     name: Install the package
-    runs-on: "ubuntu-latest"
+    runs-on: "${{ matrix.os_version || 'ubuntu-latest' }}"
     needs: build
     strategy:
       fail-fast: false
       matrix:
-        python_version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        python_version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14", "3.15"]
+        include:
+          - python_version: "3.9"
+            os_version: "ubuntu-24.04"
 
     steps:
       - uses: actions/setup-python@v7
@@ -145,4 +151,3 @@ jobs:
       - run: poetry run mypy --strict src/
       - run: poetry run twine check dist/*whl
       - run: poetry run ruff check
-
